@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Usuario = mongoose.model("Usuario");
-const enviarEmailRecovery = require("../helpers/email-recovery");
+//const enviarEmailRecovery = require("../helpers/email-recovery");
 
 class UsuarioController {
 
@@ -82,10 +82,9 @@ class UsuarioController {
     //RECOVERY 
 
     //GET /recuperar senha
-    showRecovery(req, res, next ){
-        return res.render('recovery', {error: null, success: null });
-
-    };
+    showRecovery(req, res, next){
+        return res.render('recovery', { error: null, success: null });
+    }
 
     //POST /recuperar-senha
     createRecovery ( req, res, next ){
@@ -114,7 +113,7 @@ class UsuarioController {
     }
 
     //POST /senha-recuperada
-    completRecovery( req, res, next ){
+    completeRecovery( req, res, next ){
         const { token, password } = req.body;
         if(!token || !password) return res.render("recovery/store",{ error: "Preencha novamente com a nova senha", success: null });
         Usuario.findOne({ "recovery.token" : token }).then(usuario =>{
@@ -133,3 +132,5 @@ class UsuarioController {
 
     }
 }
+
+module.exports = UsuarioController;
