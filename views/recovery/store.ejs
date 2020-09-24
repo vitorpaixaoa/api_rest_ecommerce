@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <% include('../partials/header') %>
+        <% include ../partials/header  %> 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     </head>
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-sm-6 col-sm-offset-3">
+                <div class="col-sm-3 col-sm-offset-3">
                     <h2>Recuperar Senha</h2>
                     <hr><br>
 
@@ -22,7 +22,7 @@
 
                     <%  if(error){ %> 
                         <div class="alert alert-danger">
-                            <%= danger %> 
+                            <%= error %> 
                         </div>
                     <%  } %> 
 
