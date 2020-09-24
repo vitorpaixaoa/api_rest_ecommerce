@@ -55,7 +55,7 @@ app.use((req, res, next ) =>{
 app.use((req, res, next ) =>{
     res.status(err.status || 500 );
     if(err.status !== 404) console.warn("Error: ", err.message, new Date());
-    res.json({errors : { message: err.message, status = err.status} });
+    res.json({errors : { message: err.message, status : err.status} });
 })
 
 //ESCUTAR 
