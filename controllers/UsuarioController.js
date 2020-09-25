@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Usuario = mongoose.model("Usuario");
-//const enviarEmailRecovery = require("../helpers/email-recovery");
+const enviarEmailRecovery = require("../helpers/email-recovery");
 
 class UsuarioController {
 
@@ -91,22 +91,24 @@ class UsuarioController {
         const { email } = req.body;
         if(!email) return res.render('recovery',{ error: "Preencha com seu email ", success: null })
         
-        Usuario.findOne({ email }).then((usuario) =>{
-            if(!usuario) return res.render("Recovery", { error: "Não existe usuario com este email", success: null });
-            const recpveryData = usuario.criarTokenRecuperacaoSenha();
-            return usuario.save(()=>{
-                return res.render("recovery", {error: null, success: true });
+        Usuario.findOne({ email }).then((usuario) => {
+            if(!usuario) return res.render("recovery", { error: "Não existe usuário com este email", success: null });
+            const recoveryData = usuario.criarTokenRecuperacaoSenha();
+            return usuario.save().then(() => {
+                enviarEmailRecovery({ usuario, recovery: recoveryData }, (error = null, success = null) => {
+                    return res.render("recovery", { error, success });
+                });
             }).catch(next);
-        }).catch(next)
+        }).catch(next);
     }
     
     //GET /senha-recuperada
     showCompleteRecovery(req, res, next ){
         if(!req.query.token) return res.render("recovery",{ error: "Token não identificado", success: null } );
         Usuario.findOne({ "recovery.token": req.query.token }).then(usuario =>{
-            if(!usuario) return res.render("Recovery", { error: "Não existe usuario com este token", success: null });
+            if(!usuario) return res.render("recovery", { error: "Não existe usuario com este token", success: null });
             if( new Date(usuario.recovery.date) < new Date() ) return res.render("recovery", { error: "Token expirado, tente novamente", success: null });
-            return res.render("recovery/store", { error: null, success: nullm, token: req.query.token });
+            return res.render("recovery/store", { error: null, success: null, token: req.query.token });
         }).catch(next);
 
         

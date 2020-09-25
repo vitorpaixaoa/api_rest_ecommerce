@@ -3,7 +3,7 @@ const mongoose = require("mongoose"),
 
 const uniqueValidator = require("mongoose-unique-validator");
 const crypto = require("crypto");
-const jwt = require("express-jwt");
+const jwt = require("jsonwebtoken");
 const secret = require("../config").secret;
 
 const UsuarioSchema = new mongoose.Schema({
@@ -52,19 +52,20 @@ UsuarioSchema.methods.validarSenha = function(password){
 
 UsuarioSchema.methods.gerarToken = function(){
     const hoje = new Date();
-    const exp = new Date(today);
-    exp.setDate(today.getDate()+15);
+    const exp = new Date(hoje);
+    exp.setDate(hoje.getDate()+15);
 
     return jwt.sign({
         id: this._id,
         email: this.email,
         nome: this.nome,
         exp: parseFloat(exp.getTime() / 1000, 10)
-    }, secret)
+    }, secret);
 };
 
 UsuarioSchema.methods.enviarAuthJSON = function(){
     return {
+        _id: this._id,
         nome: this.nome,
         email: this.email,
         loja: this.loja,
