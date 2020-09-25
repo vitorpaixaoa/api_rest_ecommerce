@@ -1,1 +1,2 @@
 require("./usuario")
+require("./loja")
