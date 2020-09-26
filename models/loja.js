@@ -16,7 +16,7 @@ const LoajaSchema = mongoose.Schema({
             complemento: { type: String},
             bairro:{ type: String, required: true },
             cidade:{ type: String, required: true },
-            cep:{ type: String, required: true }
+            CEP:{ type: String, required: true }
 
         },
         required: true
