@@ -46,7 +46,7 @@ class LojaController {
             if(telefones) loja.telefones = telefones;
             if(endereco) loja.endereco = endereco;
 
-            loja.save(() => res.send({ loja })).catch(next);
+            loja.save().then(() => res.send({ loja })).catch(next);
         }).catch(next);
     }
 
