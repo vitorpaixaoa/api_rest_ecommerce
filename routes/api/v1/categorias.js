@@ -6,19 +6,18 @@ const auth = require("../../auth");
 const Validation = require("express-validation");
 const { LojaValidation } = require("../../../controllers/validacoes/lojaValidation");
 const { CategoriaValidation } = require("../../../controllers/validacoes/categoriaValidation");
-const {LojaValidation} = require("../../../controllers/validacoes/lojaValidation");
 
 const categoriaController = new CategoriaController();
 //GET
-router.get("/", categoriaController.index);
-router.get("/disponiveis",categoriaController.indexDisponiveis);
-router.get("/:id", categoriaController.show);
+router.get("/", Validation(CategoriaValidation.index), categoriaController.index);
+router.get("/disponiveis",Validation(CategoriaValidation.indexDisponiveis),categoriaController.indexDisponiveis);
+router.get("/:id", Validation(CategoriaValidation.show), categoriaController.show);
 //POST
-router.post("/", auth.required, LojaValidation.admin, categoriaController.store);
+router.post("/", auth.required, LojaValidation.admin, Validation(CategoriaValidation.store), categoriaController.store);
 //PUT
-router.put("/:id",auth.required, LojaValidation.admin,categoriaController.update )
+router.put("/:id",auth.required, LojaValidation.admin, Validation(CategoriaValidation.update),categoriaController.update )
 //DELETE
-router.delete("/:id",auth.required, LojaValidation.admin,categoriaController.remove)
+router.delete("/:id",auth.required, LojaValidation.admin, Validation(CategoriaValidation.remove),categoriaController.remove)
 
 //ROTAS AO PRODUTO 
 

@@ -5,18 +5,18 @@ const Categoria = mongoose.model("Categoria");
 class CategoriaController {
 
     //GET /index
-    index(req, res, next ){
+    index(req,res,next){
         Categoria.find({ loja: req.query.loja })
-        .select("_id produtos nome codigo loja") //escolhe o que vem do find
-        .then( (categorias) => res.send({ categorias }))
-        .catch(next)
+        .select("_id produtos nome codigo disponibilidade loja")
+        .then((categorias) => res.send({ categorias }))
+        .catch(next);
     }
 
     //GET /disponiveis
     indexDisponiveis ( req, res, next ){
         Categoria.find({ loja: req.query.loja, disponibilidade: true  })
         .select("_id produtos nome codigo loja")
-        .then((categorias) => res.send({ categorias }))
+        .then(categorias => res.send({ categorias }))
         .catch(next)
     }
 
@@ -32,17 +32,19 @@ class CategoriaController {
     //POST / store
     store(req, res, next){
         const {nome, codigo} = req.body;
-        const { loja } = req.query;
+        const  {loja} = req.query;
 
         const categoria = new Categoria({ nome, codigo, loja, disponibilidade: true});
-        categoria.save().then(() => res.send({ categoria}))
+        console.log({loja})
+        categoria.save()
+        .then(() => res.send({ categoria}))
         .catch(next);
 
     }
 
     // PUT /:id
     async update(req,res,next){
-        const { nome, codigo, disponibilidade, produtos } = requ.body;
+        const { nome, codigo, disponibilidade, produtos } = req.body;
         try {
             const categoria = await Categoria.findById(req.params.id);
             if(nome) categoria.nome = nome;
