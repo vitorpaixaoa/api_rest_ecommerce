@@ -23,6 +23,6 @@ router.get("/:id", auth.required, Validation(ClienteValidation.show), clienteCon
 
 router.post("/", Validation(ClienteValidation.store), clienteController.store)
 router.put("/:id", auth.required, Validation(ClienteValidation.update), clienteController.update)
-router.delete("/", auth.required, clienteController.remove)
+router.delete("/:id", auth.required, clienteController.remove)
 
 module.exports = router;

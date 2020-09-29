@@ -38,7 +38,7 @@ const ClienteValidation ={
             nome: Joi.string().optional() , 
             email:Joi.string().email().optional(), 
             cpf: Joi.string().length(14).optional(), 
-            telefones:Joi.array().items(Joi.string()).required(), 
+            telefones:Joi.array().items(Joi.string()).optional(), 
             endereco:Joi.object({
                 local: Joi.string().required(),
                 numero: Joi.string().required(),

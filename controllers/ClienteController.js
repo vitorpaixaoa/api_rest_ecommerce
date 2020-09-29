@@ -1,3 +1,4 @@
+const { Hash } = require("crypto");
 const mongoose = require("mongoose");
 const Cliente = mongoose.model("Cliente")
 const Usuario = mongoose.model("Usuario")
@@ -15,7 +16,7 @@ class ClienteController {
             const limit = Number(req.query.limit) || 30;
             const clientes = await Cliente.paginate(
                 { loja: req.query.loja},
-                {offset, limit, populate: "usuario" }
+                {offset, limit, populate: { path:"usuario", select: "-salt -hash" } }
                 );
                 return res.send({ clientes })
         }catch(e){
@@ -36,7 +37,7 @@ class ClienteController {
         try{
             const clientes = await Cliente.paginate(
                 { loja: req.query.loja, nome:{ $regex:search}},
-                {offset, limit, populate: "usuario" }
+                {offset, limit, populate: { path:"usuario", select: "-salt -hash" }}
                 );
                 return res.send({ clientes })
         }catch(e){
@@ -47,7 +48,7 @@ class ClienteController {
     //GET /admin/:id 
     async showAdmin(req, res, next ){
         try {
-            const cliente = await Cliente.findOne({ _id: req.params.id, loja: req.query.loja }).populate("usuario");
+            const cliente = await Cliente.findOne({ _id: req.params.id, loja: req.query.loja }).populate({ path:"usuario", select: "-salt -hash" });
             return res.send({ cliente });
         } catch (e) {
            next(e) ;
@@ -63,12 +64,13 @@ class ClienteController {
     async updateAdmin(req, res, next ){
         const { nome, cpf, email, telefones, endereco, dataDeNascimento} = req.body;
         try {
-            const Cliente = await Cliente.findById(req.params.id).populate("usuario");
+            const cliente = await Cliente.findById(req.params.id).populate({ path:"usuario", select: "-salt -hash" });
             if(nome){
                 cliente.usuario.nome = nome;
                 cliente.nome = nome;
             }
             if(email) cliente.usuario.email = emal;
+            if(cpf) cliente.cpf = cpf;
             if(telefones)cliente.telefones = telefones 
             if(endereco) cliente.endereco = endereco
             if(dataDeNascimento) cliente.dataDeNascimento = dataDeNascimento;
@@ -106,7 +108,7 @@ class ClienteController {
        try {
             await usuario.save();
             await cliente.save();
-            return res.send({ cliente: Object.assign({}, cliente.doc, { cliente }) });
+            return res.send({ cliente: Object.assign({}, cliente.doc, { email: usuario.email  }) });
        } catch (e) {
            next(e)
        }
@@ -116,7 +118,7 @@ class ClienteController {
    async update (req, res, next ){
     const { nome, email, cpf, telefones, endereco, dataDeNascimento, password  } = req.body;
     try {
-        const cliente = await (await Cliente.findOne({usuario: req.payload.id})).populate('usuario')
+        const cliente = await Cliente.findOne({usuario: req.payload.id}).populate("usuario")
         if(!cliente) return res.send({ error: "Cliente não existe"})
             if(nome){
                 cliente.usuario.nome = nome;
@@ -129,21 +131,26 @@ class ClienteController {
             if(endereco) cliente.endereco = endereco;
             if(dataDeNascimento) cliente.dataDeNascimento = dataDeNascimento;
             await cliente.save();
+            cliente.usuario = {
+                email: cliente.usuario.email,
+                _id: cliente.usuario._id,
+                permissao: cliente.usuario.permissao
+            }
             return res.send({ cliente });
     } catch (e) {
         next(e)
     }
    }
 
-async remove(req, res, next ){
+   async remove(req,res,next){
     try {
-        const cliente = await (await Cliente.findOne({ usuario: req.payload.id })).populate("usuario");
+        const cliente = await Cliente.findOne({ usuario: req.payload.id }).populate("usuario");
         await cliente.usuario.remove();
         cliente.deletado = true;
         await cliente.save();
         return res.send({ deletado: true });
-    } catch (e) {
-        next(e)
+    }catch(e){
+        next(e);
     }
 }
 };
