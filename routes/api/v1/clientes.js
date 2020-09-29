@@ -9,20 +9,20 @@ const auth = require("../../auth");
 const clienteController = new ClienteController();
 
 //AMDMIN
-router.get("/", auth.required, LojaValidation.admin, clienteController.index); //mostrar todos os clientes
-//router.get("/search/:search/pedidos", auth.required, LojaValidation.admin, clienteController.searchPedidos); //procurar um pedido em especifico
-router.get("/search/:search", auth.required, LojaValidation.admin, clienteController.search); //procurar um cliente em especifico
-router.get("/admin/:id", auth.required, LojaValidation.admin, clienteController.showAdmin); //mostrar todos os clientes
+router.get("/", auth.required, LojaValidation.admin, Validation(ClienteValidation.index), clienteController.index); // OK mostrar todos os clientes
+//router.get("/search/:search/pedidos", auth.required, LojaValidation.admin, clienteController.searchPedidos); // OK procurar um pedido em especifico
+router.get("/search/:search", auth.required, LojaValidation.admin,Validation(ClienteValidation.search), clienteController.search); //procurar um cliente em especifico
+router.get("/admin/:id", auth.required, LojaValidation.admin,Validation(ClienteValidation.showAdmin), clienteController.showAdmin); //mostrar todos os clientes
 //router.get("/admin/:id/pedidos", auth.required, LojaValidation.admin, clienteController.showPedidos);//mostrar todos os pedidos
 
-router.put("/admin/:id", auth.required, LojaValidation.admin, clienteController.updateAdmin); //atualziar dados do cliente
+router.put("/admin/:id", auth.required, LojaValidation.admin, Validation(ClienteValidation.updateAdmin),clienteController.updateAdmin); //atualziar dados do cliente
 
 //CLIENTE
 
-router.get("/", auth.required, clienteController.show)
+router.get("/:id", auth.required, Validation(ClienteValidation.show), clienteController.show);
 
-router.post("/", clienteController.store)
-router.put("/:id", auth.required, clienteController.update)
+router.post("/", Validation(ClienteValidation.store), clienteController.store)
+router.put("/:id", auth.required, Validation(ClienteValidation.update), clienteController.update)
 router.delete("/", auth.required, clienteController.remove)
 
 module.exports = router;

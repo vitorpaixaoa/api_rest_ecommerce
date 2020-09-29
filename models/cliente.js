@@ -1,17 +1,16 @@
 const mongoose = require("mongoose");
-const mongoosePaginate = require("mongoose-paginate");
+
+const mongoosePaginate = require("mongoose-paginate")
 const Schema = mongoose.Schema;
 
-const ClienteSchema = ({
+const ClienteSchema = Schema ({
     usuario:{type: Schema.Types.ObjectId, ref: "Usuario", required: true },
     nome:{ type: String, required: true },
     dataDeNascimento: { type: Date, required: true },
     cpf :{ type: String, required: true },
-    telefones :{
-        type: [{type: String}]
-    },
-    teletado: {type: boolean, default: false },
-    loja: {type: Schema.Types.ObjectId, ref: "Loja", required: true },
+    telefones :{type: [{type: String}]},
+    deletado: {type: Boolean, default: false },
+    loja:{ type: Schema.Types.ObjectId, ref: "Loja", required: true },
     endereco: {
         type:{
             local: { type: String, required: true},
@@ -25,6 +24,7 @@ const ClienteSchema = ({
         required: true
     }
 }, { timestamps: true });
+ClienteSchema.plugin(mongoosePaginate);
 
-ClienteSchema.plugin(mongoosePaginate); //(traz no formato de páginas)
+
 module.exports = mongoose.model("Cliente", ClienteSchema);

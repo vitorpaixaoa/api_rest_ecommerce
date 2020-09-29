@@ -35,7 +35,7 @@ const LojaValidation = {
             cnpj: Joi.string().length(18).required(), 
             email: Joi.string().email().required(),
             telefones: Joi.array().items(Joi.string()).required() ,
-            enedreco: Joi.object({
+            endereco: Joi.object({
                 local: Joi.string().required() ,
                 numero: Joi.string().required() ,
                 complemento:Joi.string().optional(),
@@ -51,7 +51,7 @@ const LojaValidation = {
             cnpj:Joi.string().length(18).optional(), 
             email: Joi.string().email().optional(),
             telefones: Joi.array().items(Joi.string()).optional() ,
-            enedreco: Joi.object({
+            endereco: Joi.object({
                 local: Joi.string().required() ,
                 numero: Joi.string().required() ,
                 complemento: Joi.string().optional(),
