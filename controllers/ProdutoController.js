@@ -113,7 +113,8 @@ class ProdutoController {
     async remove(req,res,next){
         const { loja } = req.query;
         try {
-            const produto = await Produto.findOne({ _id: req.params._id, loja});
+            const produto = await Produto.findOne({ _id: req.params.id, loja});
+            console.log({_id: req.params._id})
             if(!produto) return res.status(400).send({ error: "Produto não econtrado"});
             
             const categoria = await Categoria.findById(produto.categoria);
@@ -152,20 +153,21 @@ class ProdutoController {
         const limit = Number(req.query.limit) || 30;
         try {
             const produtos = await Produto.paginate(
-                {loja : req.query.loja, disponibilidade:true },
-                {offset, limit, sort: getSort(req.query.sortType)}
+                {loja : req.query.loja , disponibilidade:true },
+                {offset, limit, sort: getSort(req.query.sortType), populate: ["categoria"] }
             );
-            return res.send({ produtos });
+            
+            return res.send({ produtos });  
             
         } catch (e) {
             next(e)
         }
     }
     // GET  /search/:search
-    async search (req,res,next){
+    async search  (req,res,next){
         const offset = Number(req.query.offset) || 0;
-        const limit = Number(req.query.limit) || 0;
-        const search = new RegExp(req.parms.search, "i");
+        const limit = Number(req.query.limit) || 30;
+        const search  = new RegExp(req.params.search,"i");
         try {
             const produtos = await Produto.paginate(
                 {
