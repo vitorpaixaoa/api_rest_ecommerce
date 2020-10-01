@@ -15,7 +15,7 @@ const produtoController = new ProdutoController;
 */
     router.post("/", auth.required, LojaValidation.admin,Validation(ProdutoValidation.store) , produtoController.store);
     router.put("/:id", auth.required, LojaValidation.admin, Validation(ProdutoValidation.update) , produtoController.update);
-    router.put("/images/:id", auth.required, LojaValidation.admin, Validation(ProdutoValidation.updateImages), upload.array("files", 4), produtoController.updateImages);
+    router.put("/images/:id", auth.required, LojaValidation.admin, Validation(ProdutoValidation.uploadImages), upload.array("files", 4), produtoController.uploadImages);
     router.delete("/:id", auth.required, LojaValidation.admin, Validation(ProdutoValidation.remove) , produtoController.remove);
 
 /*

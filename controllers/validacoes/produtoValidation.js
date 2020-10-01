@@ -27,7 +27,7 @@ const ProdutoValidation = {
             disponibilidade: Joi.boolean().optional(),
         }
     },
-    updateImages: {
+    uploadImages: {
         params:{
             id: Joi.string().alphanum().length(24).required()
         }

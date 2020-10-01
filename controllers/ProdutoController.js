@@ -5,6 +5,8 @@ const Categoria = mongoose.model("Categoria");
 
 const Avaliacao = mongoose.model("Avaliacao")
 
+const Variacao = mongoose.model("Variacao")
+
 const getSort = (sortType) =>{
     switch(sortType){
         case "alfabetica_a-z":
@@ -93,7 +95,7 @@ class ProdutoController {
     }
 
     //PUT /images/:id
-    async updateImages(req,res,next){
+    async uploadImages(req,res,next){
         try {
             const {loja} = req.query;
             const produto = await Produto.findOne({ _id: req.params.id, loja});
@@ -209,6 +211,17 @@ class ProdutoController {
         try {
             const avaliacoes = await Avaliacao.find({ produto: req.params.id });
             return res.send({ avaliacoes})
+        } catch (e) {
+            next(e)
+        }
+    }
+
+        //VARIACOES
+    // GET /:id/variacoes
+    async showVariacoes(req,res,next){
+        try {
+            const variacoes = await Variacao.find({ produto: req.params.id });
+            return res.send({ variacoes})
         } catch (e) {
             next(e)
         }
