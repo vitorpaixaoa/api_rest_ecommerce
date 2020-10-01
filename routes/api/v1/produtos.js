@@ -29,6 +29,7 @@ const produtoController = new ProdutoController;
 /*
 ---- VARIACOES -------
 */
+router.get("/:id/variacoes", Validation(ProdutoValidation.showVariacoes) , produtoController.showVariacoes);
 
 
 /*
