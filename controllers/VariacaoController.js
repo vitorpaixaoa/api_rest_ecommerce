@@ -53,7 +53,7 @@ class VariacaoController {
 
     //PUT  /id: update
     async update (req,res,next){
-        const { codigo, disponibilidade , nome, preco, promocao, entrega, quantidade } = req.body;
+        const { codigo, fotos , nome, preco, promocao, entrega, quantidade } = req.body;
         const { loja, produto } = req.query;
         const { id: _id } = req.params;
         try {
@@ -61,7 +61,7 @@ class VariacaoController {
             if(!variacao) res.status(400).send({error:"Variacao Não encontrada"});
 
             if( codigo ) variacao.codigo = codigo;
-            if( disponibilidade !== undefined ) variacao.disponibilidade = disponibilidade;
+            if( fotos ) variacao.fotos = fotos;
             if( nome ) variacao.nome = nome;
             if( preco ) variacao.preco = preco;
             if( promocao ) variacao.promocao = promocao;
