@@ -60,7 +60,7 @@ class ProdutoController {
 
             if(titulo) produto.titulo = titulo;
             if(descricao) produto.descricao = descricao;
-            if(disponibilidade ==! undefined) produto.disponibilidade = disponibilidade;
+            if(disponibilidade !== undefined) produto.disponibilidade = disponibilidade;
             if(preco) produto.preco = preco;
             if(promocao) produto.promocao = promocao;
             if(sku) produto.sku = sku;
@@ -94,7 +94,7 @@ class ProdutoController {
     async updateImages(req,res,next){
         try {
             const {loja} = req.query;
-            const produto = await Produto.findOne({ _id: req.params._id, loja});
+            const produto = await Produto.findOne({ _id: req.params.id, loja});
             if(!produto) return res.status(400).send({ error: "Produto não econtrado"});
 
             const novasImagens = req.files.map(item => item.filename);
@@ -191,8 +191,11 @@ class ProdutoController {
         try {
             const produtos = await Produto
             .findById(req.params.id)
-            .populate(["avaliacoes","variacoes","loja"])
-            return res.send({ produto })
+            .populate([
+                //"avaliacoes",
+                //"variacoes",
+                "loja"])
+            return res.send({ produtos })
         } catch (e) {
             next(e)
         }
