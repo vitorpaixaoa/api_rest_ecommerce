@@ -34,7 +34,7 @@ const produtoController = new ProdutoController;
 /*
 ---------- AVALIACOES ----------
 */
-    router.get("/:id/avaliacoes", produtoController.showAvaliacoes);
+    router.get("/:id/avaliacoes", Validation(ProdutoValidation.showAvaliacoes) , produtoController.showAvaliacoes);
 
 
 module.exports = router;
