@@ -32,7 +32,7 @@ class VariacaoController {
         const { codigo, nome, preco, promocao, entrega, quantidade } = req.body;
         const { loja, produto } = req.query;
         try {
-            const variacao = new ({
+            const variacao = new Variacao ({
                 codigo, nome, preco, promocao, entrega, quantidade, loja, produto
             });
 
@@ -46,6 +46,7 @@ class VariacaoController {
 
             return res.send({ variacao })
         } catch (e) {
+            console.log(e);
             next(e)
         }
      }
@@ -57,7 +58,7 @@ class VariacaoController {
         const { id: _id } = req.params;
         try {
             const variacao = await Variacao.findOne({loja, produto, _id})
-            if(!variacao) res.status(400).sen({error:"Variacao Não encontrada"});
+            if(!variacao) res.status(400).send({error:"Variacao Não encontrada"});
 
             if( codigo ) variacao.codigo = codigo;
             if( disponibilidade !== undefined ) variacao.disponibilidade = disponibilidade;
@@ -67,7 +68,6 @@ class VariacaoController {
             if( entrega ) variacao.entrega = entrega;
             if( quantidade ) variacao.quantidade = quantidade;
 
-            await _produto.save();
             await variacao.save();
             
             return res.send({ variacao })
@@ -105,7 +105,7 @@ class VariacaoController {
             const _produto = await Produto.findById(variacao.produto);
             _produto.variacoes = _produto.variacoes.filter(item => item.toString() !== variacao._id.toString() )
 
-            await produto.save();
+            await _produto.save();
             await variacao.remove();
 
             return res.send({ deletado: true })
