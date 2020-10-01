@@ -77,6 +77,11 @@ const ProdutoValidation = {
         params:{
             id: Joi.string().alphanum().length(24).required(),
         }
+    },
+    showVariacoes:{
+        params:{
+            id: Joi.string().alphanum().length(24).required(),
+        }
     }
 
 };

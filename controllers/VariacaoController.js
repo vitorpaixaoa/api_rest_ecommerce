@@ -29,7 +29,7 @@ class VariacaoController {
 
      //POST / - store
      async store (req,res,next){
-        const { codigo, nome, preco, promocao, fotos, entrega, quantidade } = req.body;
+        const { codigo, nome, preco, promocao, entrega, quantidade } = req.body;
         const { loja, produto } = req.query;
         try {
             const variacao = new ({
