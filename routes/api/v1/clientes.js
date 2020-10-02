@@ -10,10 +10,10 @@ const clienteController = new ClienteController();
 
 //AMDMIN
 router.get("/", auth.required, LojaValidation.admin, Validation(ClienteValidation.index), clienteController.index); // OK mostrar todos os clientes
-//router.get("/search/:search/pedidos", auth.required, LojaValidation.admin, clienteController.searchPedidos); // OK procurar um pedido em especifico
+router.get("/search/:search/pedidos", auth.required, LojaValidation.admin, clienteController.searchPedidos); // OK procurar um pedido em especifico
 router.get("/search/:search", auth.required, LojaValidation.admin,Validation(ClienteValidation.search), clienteController.search); //procurar um cliente em especifico
 router.get("/admin/:id", auth.required, LojaValidation.admin,Validation(ClienteValidation.showAdmin), clienteController.showAdmin); //mostrar todos os clientes
-//router.get("/admin/:id/pedidos", auth.required, LojaValidation.admin, clienteController.showPedidos);//mostrar todos os pedidos
+router.get("/admin/:id/pedidos", auth.required, LojaValidation.admin, clienteController.showPedidos);//mostrar todos os pedidos
 
 router.put("/admin/:id", auth.required, LojaValidation.admin, Validation(ClienteValidation.updateAdmin),clienteController.updateAdmin); //atualziar dados do cliente
 
