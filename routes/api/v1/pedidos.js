@@ -14,10 +14,8 @@ const pedidoController = new PedidoController();
     
     router.delete("/admin/:id", auth.required, LojaValidation.admin, pedidoController.removeAdmin)
 
-    // -- /cliente
-    router.get("/admin/:id/cliente", auth.required, LojaValidation.admin, pedidoController.showClientePedidosAdmin)
-   
-    router.get("/admin/:id/carrinho", auth.required, LojaValidation.admin, pedidoController.showCarrinhoPedidoAdmin)
+    // -- /carriho
+    router.get("/admin/:id/cliente", auth.required, LojaValidation.admin, pedidoController.showCarrinhoPedidoAdmin)
    
     // -- entrega
 

@@ -14,4 +14,4 @@ const PagamentoSchema = Schema({
 
 PagamentoSchema.plugin(mongoosePaginate);
 
-module.exports = mongoose.model("Entrega", PagamentoSchema);
+module.exports = mongoose.model("Pagamento", PagamentoSchema);
