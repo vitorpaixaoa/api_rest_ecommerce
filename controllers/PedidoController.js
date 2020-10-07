@@ -7,7 +7,7 @@ const Pagamento = mongoose.model("Pagamento")
 const Entrega = mongoose.model("Entrega")
 const Cliente = mongoose.model("Cliente")
 
-//const  CarrinhoValidation  = require ("./validacoes/carrinhoValidation")
+const  CarrinhoValidation  = require ("./validacoes/carrinhoValidation")
 
 class PedidoController {    
     //ADMIN
@@ -130,7 +130,7 @@ class PedidoController {
         try {
             
             //CHECAR DADOS DO CARRINHO
-            //if(!CarrinhoValidation(carrinho)) return res.status(422).send({ error: "Carrinho inválido"})
+            if(!CarrinhoValidation(carrinho)) return res.status(422).send({ error: "Carrinho inválido"})
 
             //CHECAR DADOS DA ENTREGA
            // if(!EntregaValidation(carrinho, entrega )) return res.status(422).send({ error: "Dados de entrega inválidos"})
