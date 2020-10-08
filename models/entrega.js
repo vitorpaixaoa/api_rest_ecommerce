@@ -4,7 +4,7 @@ const mongoose= require("mongoose"),
 
 const EntregaSchema = Schema({
     status: {type: String, required:true},
-    codigoRastreamento: { type: String, required: true },
+    codigoRastreamento: { type: String},
     tipo: { type: String, required: true },
     custo: { type: Number, required: true },
     prazo: { type: Number, required: true },

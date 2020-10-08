@@ -30,13 +30,13 @@ class ClienteController {
 
     //GET /search/:search/pedidos
     async searchPedidos(req, res, next) {
-        const { offset, limit, loja } = req.query;
+        const { offset, limit, loja,  } = req.query;
         try {
             const search = new RegExp(req.params.search, "i");
             const clientes = await Cliente.find({ loja, nome:{$regex:search} });
             const pedidos = await Pedido.paginate(
                 {loja, cliente: {$in: clientes.map(item => item._id) }},
-                {offset, limit, populate: ["cliente","pagamento", "entrega"] }
+                {offset, limit, populate: ["cliente","pagamento","entrega"] }
             );
             pedidos.docs = await Promise.all(pedidos.docs.map(async(pedido) =>{
                 pedido.carrinho = await Promise.all(pedido.carrinho.map(async (item) =>{
@@ -79,11 +79,11 @@ class ClienteController {
     }
     
     // GET /admin/:id/pedidos
-     async showPedidosClientes(req, res ,next ){
+     async showPedidosCliente(req, res ,next ){
         const { offset, limit, loja } = req.query;
         try {
             const pedidos = await Pedido.paginate(
-                {loja, clientes: req.params.id }, { 
+                {loja, cliente: req.params.id }, { 
                 offset: Number(offset || 0), 
                 limit: Number(limit || 30 ), 
                 populate:["cliente", "pagamento", "entrega"] 

@@ -4,7 +4,7 @@ const mongoose= require("mongoose"),
 
 const PagamentoSchema = Schema({
     valor: { type: Number, required: true },
-    formaDePagamento: { type: String, required: true },
+    forma: { type: String, required: true },
     parcelado: { Object },
     status: { type: String, required: true },
     pedido: { type: Schema.Types.ObjectId, ref: "Pedido", required: true },

@@ -2,20 +2,22 @@ const router = require("express").Router();
 
 const PedidoController = require("../../../controllers/PedidoController")
 
-const { LojaValidation } = require("../../../controllers/validacoes/lojaValidation")
+const { LojaValidation } = require("../../../controllers/validacoes/lojaValidation");
+const Validation = require("express-validation")
+const { PedidoValidation } = require("../../../controllers/validacoes/pedidoValidation")
 const auth = require("../../auth")
 
 const pedidoController = new PedidoController();
 
     //ADMIN ******************************************************
 
-    router.get("/admin", auth.required, LojaValidation.admin, pedidoController.indexAdmin);
-    router.get("/admin/:id",auth.required, LojaValidation.admin, pedidoController.showAdmin)
+    router.get("/admin", auth.required, LojaValidation.admin, Validation(PedidoValidation.indexAdmin) , pedidoController.indexAdmin);
+    router.get("/admin/:id",auth.required, LojaValidation.admin, Validation(PedidoValidation.showAdmin) , pedidoController.showAdmin)
     
-    router.delete("/admin/:id", auth.required, LojaValidation.admin, pedidoController.removeAdmin)
+    router.delete("/admin/:id", auth.required, LojaValidation.admin, Validation(PedidoValidation.removeAdmin) , pedidoController.removeAdmin)
 
     // -- /carriho
-    router.get("/admin/:id/cliente", auth.required, LojaValidation.admin, pedidoController.showCarrinhoPedidoAdmin)
+    router.get("/admin/:id/carrinho", auth.required, LojaValidation.admin,  Validation(PedidoValidation.showCarrinhoPedidoAdmin) ,pedidoController.showCarrinhoPedidoAdmin)
    
     // -- entrega
 
@@ -25,13 +27,13 @@ const pedidoController = new PedidoController();
 
     
     //CLIENTE *************************************************
-    router.get("/", auth.required, pedidoController.index);
-    router.get("/:id",auth.required, pedidoController.show)
+    router.get("/", auth.required, Validation(PedidoValidation.index) , pedidoController.index);
+    router.get("/:id",auth.required, Validation(PedidoValidation.show) , pedidoController.show)
     
-    router.post("/",auth.required, pedidoController.store )
-    router.delete("/:id", auth.required, pedidoController.remove)
+    router.post("/",auth.required, Validation(PedidoValidation.store) ,pedidoController.store )
+    router.delete("/:id", auth.required, Validation(PedidoValidation.remove) ,pedidoController.remove)
    
-    router.get("/:id/carrinho", auth.required, pedidoController.showCarrinhoPedido)
+    router.get("/:id/carrinho", auth.required, Validation(PedidoValidation.showCarrinhoPedido) ,pedidoController.showCarrinhoPedido)
    
     // -- entrega
 

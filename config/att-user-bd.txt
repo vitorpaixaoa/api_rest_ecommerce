@@ -1,0 +1,6 @@
+db.usuarios.update({"_id":  ObjectId("5f7cef3bef03422fc4244861")},{$set:{
+	"permissao": [
+		"cliente","admin"
+	],
+	"loja" : ObjectId("5f7e4312ed88561ff8c056a5")
+}})
