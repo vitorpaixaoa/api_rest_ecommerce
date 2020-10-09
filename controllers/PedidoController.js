@@ -7,6 +7,9 @@ const Variacao = mongoose.model("Variacao");
 const Pagamento = mongoose.model("Pagamento");
 const Entrega = mongoose.model("Entrega");
 const Cliente = mongoose.model("Cliente");
+const RegistroPedido = mongoose.model("RegistroPedido")
+
+const { calcularFrete } = require("./integracoes/correios")
 
 const  CarrinhoValidation  = require ("./validacoes/carrinhoValidation")
 
@@ -49,7 +52,8 @@ class PedidoController {
                 item.variacao = await Variacao.findById(item.variacao);
                 return item;
             }));
-            return res.send({ pedido });
+            const registros = await RegistroPedido.find({ pedido: pedido._id})
+            return res.send({ pedido, registros  });
 
         } catch (e) {
             next(e)
@@ -61,7 +65,13 @@ class PedidoController {
             const pedido = await Pedido.findOne({ loja: req.query.loja, _id: req.params.id})
             if(!pedido) res.status(400).send({ error: "Pedido não encontrado"});
             pedido.cancelado = true;
-            
+
+            const registroPedido = new RegistroPedido({
+                pedido: pedido._id,
+                tipo: "pedido",
+                situacao: "pedido_cancelado"
+            });
+            await registroPedido.save();
             // REGISTRO DE ATIVIDADES;
             //ENVIAR EMAIL PARA CLIENTE e ADMIN  = pedido cancelado;
 
@@ -123,7 +133,12 @@ class PedidoController {
                 item.variacao = await Variacao.findById(item.variacao);
                 return item;
             }));
-            return res.send({ pedido });
+            const registros = await RegistroPedido.find({ pedido: pedido._id})
+
+            const resultado = await calcularFrete({ cep: "65052735", produtos: pedido.carrinho })
+
+
+            return res.send({  resultado });
 
         } catch (e) {
             next(e)
@@ -178,6 +193,13 @@ class PedidoController {
             await novoPagamento.save();
             await novaEntrega.save();
 
+            const registroPedido = new RegistroPedido({
+                pedido: pedido._id,
+                tipo: "pedido",
+                situacao: "pedido_criado"
+            });
+            await registroPedido.save();
+
             //notificar via email cliente e admin novo pedido
 
             return res.send({ pedido: Object.assign({}, pedido._doc, { entrega: novaEntrega, pagamento: novoPagamento, cliente }) })        
@@ -193,6 +215,12 @@ class PedidoController {
             if(!pedido) res.status(400).send({ error: "Pedido não encontrado"});
             pedido.cancelado = true;
             
+            const registroPedido = new RegistroPedido({
+                pedido: pedido._id,
+                tipo: "pedido",
+                situacao: "pedido_cancelado"
+            });
+            await registroPedido.save();
             // REGISTRO DE ATIVIDADES;
             //ENVIAR EMAIL PARA CLIENTE e ADMIN  = pedido cancelado;
 
