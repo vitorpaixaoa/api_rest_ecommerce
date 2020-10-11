@@ -14,16 +14,16 @@ class ClienteController {
     * 
     */
     //GET /index
-    async index(req, res, next ){
-        try{
+    async index(req,res,next){
+        try {
             const offset = Number(req.query.offset) || 0;
             const limit = Number(req.query.limit) || 30;
             const clientes = await Cliente.paginate(
-                { loja: req.query.loja},
-                {offset, limit, populate: { path:"usuario", select: "-salt -hash" } }
-                );
-                return res.send({ clientes })
-        }catch(e){
+                { loja: req.query.loja }, 
+                { offset, limit, populate: { path:"usuario", select: "-salt -hash" } }
+            );
+            return res.send({ clientes });
+        } catch(e){
             next(e);
         }
     }
@@ -150,7 +150,7 @@ class ClienteController {
        try {
             await usuario.save();
             await cliente.save();
-            return res.send({ cliente: Object.assign({}, cliente.doc, { email: usuario.email  }) });
+            return res.send({ cliente});
        } catch (e) {
            next(e)
        }

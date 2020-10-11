@@ -1,5 +1,3 @@
-const { sCepOrigem } = require("../../config/correios");
-
 const Correios = require("node-correios"),
   correios = new Correios(),
   config = require("../../config/correios"),
@@ -7,14 +5,14 @@ const Correios = require("node-correios"),
 
 const calcularFrete = async ({cep, produtos}) => {
 
-const _produtos = produtos.map(item => ({ 
-        pesoKg: item.variacao.entrega.pesoKg,
-        profundidadeCm: item.variacao.entrega.dimensoes.profundidadeCm,
-        alturaCm: item.variacao.entrega.dimensoes.alturaCm,
-        larguraCm: item.variacao.entrega.dimensoes.larguraCm,
-        quantidade: item.quantidade,
-        preco: item.precoUnitario
-    }));
+  const _produtos = produtos.map(item => ({
+    pesoKg: item.variacao.entrega.pesoKg,
+    profundidadeCm: item.variacao.entrega.dimensoes.profundidadeCm,
+    alturaCm: item.variacao.entrega.dimensoes.alturaCm,
+    larguraCm: item.variacao.entrega.dimensoes.larguraCm,
+    quantidade: item.quantidade,
+    preco: item.precoUnitario
+}));
     const caixa = calcBox(_produtos);
     const pesoTotal = _produtos.reduce((all, item) => all + (item.pesoKg*item.quantidade),0)
     const valorFinal = _produtos.reduce((all, item) => all + (item.preco*item.quantidade),0)
