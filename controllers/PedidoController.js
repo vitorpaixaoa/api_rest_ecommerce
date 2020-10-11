@@ -138,7 +138,7 @@ class PedidoController {
             const resultado = await calcularFrete({ cep: "65052735", produtos: pedido.carrinho })
 
 
-            return res.send({  resultado });
+            return res.send({ pedido , registros });
 
         } catch (e) {
             next(e)

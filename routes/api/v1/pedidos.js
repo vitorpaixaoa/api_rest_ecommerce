@@ -19,7 +19,6 @@ const pedidoController = new PedidoController();
     // -- /carriho
     router.get("/admin/:id/carrinho", auth.required, LojaValidation.admin,  Validation(PedidoValidation.showCarrinhoPedidoAdmin) ,pedidoController.showCarrinhoPedidoAdmin)
    
-    // -- entrega
 
 
     // --pagamento 
