@@ -1,4 +1,6 @@
-const Joi = require("joi");
+const BaseJoi = require("joi");
+const Extension = require("joi-date-extensions")
+const Joi = BaseJoi.extend(Extension);
 
 const PedidoValidation = {
     indexAdmin: {
@@ -60,10 +62,39 @@ const PedidoValidation = {
             })).required(),
             pagamento: Joi.object({
                 forma: Joi.string().required(),
-                valor: Joi.number().required()
+                valor: Joi.number().required(),
+                parcelas: Joi.number().optional(),
+                enderecoEntregaIgualCobranca: Joi.boolean().required(),
+                endereco: Joi.object({
+                    local: Joi.string().required(),
+                    numero: Joi.string().required(),
+                    complemento: Joi.string().optional(),
+                    bairro: Joi.string().required(),
+                    cidade: Joi.string().required(),
+                    estado: Joi.string().required(),
+                    CEP: Joi.string().required(),
+                }).required(),
+                cartao: Joi.object({
+                    nomeCompleto: Joi.string().required(),
+                    codigoArea: Joi.string().required(),
+                    telefone: Joi.string().required(),
+                    dataDeNascimento: Joi.date().format("DD/MM/YYYY").raw().required(),
+                    credit_card_token: Joi.string().required(),
+                    cpf: Joi.string().required()
+                }).optional()
+
             }).required(),
             entrega: Joi.object({
                 custo: Joi.number().required(),
+                endereco: Joi.object({
+                    local: Joi.string().required(),
+                    numero: Joi.string().required(),
+                    complemento: Joi.string().optional(),
+                    bairro: Joi.string().required(),
+                    cidade: Joi.string().required(),
+                    estado: Joi.string().required(),
+                    CEP: Joi.string().required(),
+                }).required(),
                 tipo: Joi.string().required(),
                 prazo: Joi.number().required()
             }).required()
