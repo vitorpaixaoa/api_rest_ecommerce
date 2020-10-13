@@ -109,15 +109,17 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
             this.checkoutData.creditCardHolderCNPJ = cpf_cnpj;
         }
     }
-    if(this.notificationURL){
-        params.form.notificationURL = this.notificationURL;
-    }
 
     const params = {
         url: this.url + '/transactions?token=' + this.token + '&email=' + this.email,
         form: this.checkoutData
     }
 
+    if(this.notificationURL){
+        params.form.notificationURL = this.notificationURL;
+    }
+
+    
     request.post(params, function(err, response, body) {
         if (err) {
             return cb(err, false);

@@ -16,32 +16,34 @@ class PagamentoController {
     //Clientes
     async show(req,res,next){
         try {
-            const pagamento = await Pagamento.findOne({_id: req.params.id, loja: req.query.loja });
+            const pagamento = await Pagamento.findOne({ _id: req.params.id, loja: req.query.loja });
             if(!pagamento) return res.status(400).send({ error: "Pagamento não existe"});
 
-            const registros = RegistroPedido.find({ pedido: pagamento.pedido, tipo: "pagamento" });
+            const registros = await  RegistroPedido.find({ pedido: pagamento.pedido, tipo: "pagamento" });
 
             const situacao = (pagamento.pagSeguroCode) ? await getTransactionStatus(pagamento.pagSeguroCode) : null;
 
             if(
                 situacao && 
                 (
-                    registros.length === 0 || 
+                    registros.length === 0 ||  
+                    !registros[registros.length-1].payload ||
+                    !registros[registros.length-1].payload.code ||
                     registros[registros.length-1].payload.code !== situacao.code 
                     )
                 ){
                     const registroPedido = new RegistroPedido({
                         pedido: pagamento.pedido,
                         tipo: "pagamento",
-                        situacao: situacao.status ||  "Situacao",
+                        situacao: situacao.status || "Situacao",
                         payload: situacao
                     });
                     pagamento.status = situacao.status;
-                    await pagamento.save();
-                    await registroPedido.save();
-                    registros.push(RegistroPedido);
+                await pagamento.save();
+                await registroPedido.save();
+                registros.push(registroPedido);
             }
-            return res.send({ pagamento, registros, situacao })
+            return res.send({ pagamento, registros, situacao });
         } catch (e) {
             console.log(e)
             next(e)
@@ -116,15 +118,15 @@ class PagamentoController {
 
     async verNotificacao(req,res,next){
         try {
-            const { notificationCode, notificationType }= req.body;
-            if(notificationType !== "transaction") return res.send({ success: true });
+            const { notificationCode, notificationType } = req.body;
+            if( notificationType !== "transaction" ) return res.send({ success: true });
 
             const result = await getNotification(notificationCode);
 
-            const pagamento = await Pagamento.findOne({ pagSeguroCode: result.code});
-            if(!pagamento) return res.status(400).send({ error: "Pagamento não existe"});
+            const pagamento = await Pagamento.findOne({ pagSeguroCode: result.code });
+            if(!pagamento) return res.status(400).send({ error: "Pagamento nao existe" });
 
-            const registros = RegistroPedido.find({ pedido: pagamento.pedido, tipo: "pagamento" });
+            const registros = await RegistroPedido.find({ pedido: pagamento.pedido, tipo: "pagamento" });
 
             const situacao = (pagamento.pagSeguroCode) ? await getTransactionStatus(pagamento.pagSeguroCode) : null;
 

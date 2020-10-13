@@ -149,12 +149,13 @@ class PedidoController {
     async store (req,res,next){
         const {  carrinho, pagamento, entrega } = req.body;
         const { loja } = req.query;
+        const _carrinho = carrinho.slice();
         try {
             
             //CHECAR DADOS DO CARRINHO
 
             if(!await CarrinhoValidation(carrinho)) return res.status(422).send({ error: "Carrinho inválido"})
-            const cliente = await Cliente.findOne({usuario: req.payload.id}).populate("usuario")
+            const cliente = await Cliente.findOne({usuario: req.payload.id}).populate({path:"usuario", "select":"_id noome email"})
 
              //CHECAR DADOS DA ENTREGA
              if(!await EntregaValidation.checarValorPrazo(cliente.endereco.CEP, carrinho, entrega)) return res.status(422).send({ error: "Dados de Entrega Inválidos" });
@@ -187,7 +188,7 @@ class PedidoController {
 
             const pedido = new Pedido({
                 cliente: cliente._id,
-                carrinho,
+                carrinho: _carrinho,
                 pagamento: novoPagamento._id,
                 entrega: novaEntrega._id,
                 loja
