@@ -70,7 +70,7 @@ class PedidoController {
                                                 loja: req.query.loja, 
                                                 _id: req.params.id
                                             })
-                                                .populate({ path: "cliente", populate: "usuario"})
+                                                .populate({ path: "cliente", populate: {path:"usuario"} })
             if(!pedido) res.status(400).send({ error: "Pedido não encontrado"});
             pedido.cancelado = true;
 
@@ -81,11 +81,12 @@ class PedidoController {
             });
             await registroPedido.save();
             //ENVIAR EMAIL PARA CLIENTE e ADMIN  = pedido cancelado;
-            EmailController.cancelarPedido({ usuario: pedido.cliete.usuario, pedido });
+            EmailController.cancelarPedido({ usuario: pedido.cliente.usuario, pedido });
 
             await pedido.save();
             return res.send({ cancelado: true })
         } catch (e) {
+            console.log(e)
             next(e)
         }
     }
@@ -242,7 +243,7 @@ class PedidoController {
             //ENVIAR EMAIL PARA CLIENTE e ADMIN  = pedido cancelado;
             const administradores = await Usuario.find({ permissao: "admin", loja:pedido.loja})
             administradores.forEach((usuario)=>{
-                EmailController.enviarNovoPedido({ pedido, usuario: usuario });
+                EmailController.cancelarPedido({ pedido, usuario: usuario });
             })
 
             await pedido.save();
