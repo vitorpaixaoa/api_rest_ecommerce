@@ -109,17 +109,15 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
             this.checkoutData.creditCardHolderCNPJ = cpf_cnpj;
         }
     }
-
+    
     const params = {
         url: this.url + '/transactions?token=' + this.token + '&email=' + this.email,
         form: this.checkoutData
     }
-
-    if(this.notificationURL){
+    if( this.notificationURL ){
         params.form.notificationURL = this.notificationURL;
     }
 
-    
     request.post(params, function(err, response, body) {
         if (err) {
             return cb(err, false);
@@ -139,20 +137,21 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
 
 pagseguro.prototype.getNotification = function(notificationCode, cb){
     const params = {
-        url: this.url + '/transactions/notifications/'+notificationCode+ "?token+"+ this.token + "&email=" + this.email
+        url: this.url + '/transactions/notifications/'+ notificationCode + "?token=" + this.token + "&email=" + this.email
     }
+
     request.get(params, function(err, response, body){
         if(err){
             return cb(err, false);
-        }else if(response.statusCode === 200){
+        } else if(response.statusCode === 200){
             const json = JSON.parse(xmlParser.toJson(body));
             return cb(false, json.transaction);
-        }else{
-            const json = JSON.parse(xmlParser.toJson(body)); 
-            if(json.errors && json.errors.error){
+        } else {
+            const json = JSON.parse(xmlParser.toJson(body));
+            if (json.errors && json.errors.error){
                 return cb(json.errors.error, false);
             }
-            return cb(body, false )
+            return cb(body, false);
         }
     });
 }

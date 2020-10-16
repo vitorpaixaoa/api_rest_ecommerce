@@ -1,0 +1,1 @@
+npm install --save redux@4.0.1 react-redux@6.0.1 redux-thunk@2.3.0 moment@2.24.0 axios@0.18.0 react-router-dom@5.0.0 react-cookie@3.1.1
