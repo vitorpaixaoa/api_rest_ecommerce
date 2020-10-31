@@ -1,4 +1,4 @@
-db.usuarios.update({"_id":  ObjectId("5f7cef3bef03422fc4244861")},{$set:{
+db.usuarios.update({"_id":  ObjectId("5f9d7fb479b595119d0330f1")},{$set:{
 	"permissao": [
 		"cliente","admin"
 	],
