@@ -17,7 +17,7 @@ class CategoriaController {
     //GET /disponiveis
     indexDisponiveis ( req, res, next ){
         Categoria.find({ loja: req.query.loja, disponibilidade: true  })
-        .select("_id produtos nome codigo loja")
+        .select("_id produtos nome disponibilidade codigo loja")
         .then(categorias => res.send({ categorias }))
         .catch(next)
     }
@@ -25,7 +25,7 @@ class CategoriaController {
     //GET /:id show
     show(req,res,next){
         Categoria.findOne({loja: req.query.loja, _id: req.params})
-        .select("_id produtos nome codigo loja")
+        .select("_id produtos nome disponibilidade codigo loja")
         .populate(["produtos"])
         .then((categoria) =>res.send({ categoria }))
         .catch(next)
