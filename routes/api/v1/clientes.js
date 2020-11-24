@@ -15,6 +15,8 @@ router.get("/search/:search", auth.required, LojaValidation.admin,Validation(Cli
 router.get("/admin/:id", auth.required, LojaValidation.admin,Validation(ClienteValidation.showAdmin), clienteController.showAdmin); //mostrar todos os clientes
 router.get("/admin/:id/pedidos", auth.required, LojaValidation.admin, Validation(ClienteValidation.showPedidosCliente), clienteController.showPedidosCliente);//mostrar todos os pedidos
 
+router.delete("/admin/:id", auth.required, LojaValidation.admin, clienteController.removeAdmin);
+
 router.put("/admin/:id", auth.required, LojaValidation.admin, Validation(ClienteValidation.updateAdmin), clienteController.updateAdmin); //atualziar dados do cliente
 
 //CLIENTE

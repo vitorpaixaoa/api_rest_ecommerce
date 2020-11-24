@@ -103,24 +103,36 @@ class ClienteController {
     }
 
     //PUT /admin/:id
-    async updateAdmin(req, res, next ){
-        const { nome, cpf, email, telefones, endereco, dataDeNascimento} = req.body;
+    async updateAdmin(req,res,next){
+        const { nome, cpf, email, telefones, endereco, dataDeNascimento } = req.body;
         try {
             const cliente = await Cliente.findById(req.params.id).populate({ path:"usuario", select: "-salt -hash" });
             if(nome){
                 cliente.usuario.nome = nome;
                 cliente.nome = nome;
             }
-            if(email) cliente.usuario.email = emal;
+            if(email) cliente.usuario.email = email;
             if(cpf) cliente.cpf = cpf;
-            if(telefones)cliente.telefones = telefones 
-            if(endereco) cliente.endereco = endereco
+            if(telefones) cliente.telefones = telefones;
+            if(endereco) cliente.endereco = endereco;
             if(dataDeNascimento) cliente.dataDeNascimento = dataDeNascimento;
+            await cliente.usuario.save();
             await cliente.save();
             return res.send({ cliente });
-        } catch (e) {
-            next(e)
-            
+        } catch(e){
+            next(e);
+        }
+    }
+
+    async removeAdmin(req,res,next){
+        try {
+            const cliente = await Cliente.findById(req.params.id).populate("usuario");
+            if(!cliente) return res.status(400).send({ error: "Cliente nao encontrado." })
+            await cliente.usuario.remove();
+            await cliente.remove();
+            return res.send({ deletado: true });
+        }catch(e){
+            next(e);
         }
     }
 
