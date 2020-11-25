@@ -24,7 +24,7 @@ class CategoriaController {
 
     //GET /:id show
     show(req,res,next){
-        Categoria.findOne({loja: req.query.loja, _id: req.params.id;})
+        Categoria.findOne({loja: req.query.loja, _id: req.params.id})
         .select("_id produtos nome disponibilidade codigo loja")
         .populate(["produtos"])
         .then(categoria => res.send({ categoria }))
