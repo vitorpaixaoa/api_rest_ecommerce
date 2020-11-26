@@ -10,13 +10,13 @@ const Variacao = mongoose.model("Variacao")
 const getSort = (sortType) =>{
     switch(sortType){
         case "alfabetica_a-z":
-            return {titulo: 1};
-        case "alfabetica_z-a":
             return {titulo: -1};
+        case "alfabetica_z-a":
+            return {titulo: 1};
         case "preco-crescente":
-            return {preco: 1};
+            return {preco: 1;};
         case "preco-decrescente":
-            return {preco: 1};
+            return {preco: -1};
         default:
             return {};
     }
