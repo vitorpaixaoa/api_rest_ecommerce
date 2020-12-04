@@ -194,16 +194,17 @@ class ProdutoController {
     // GET  /:id
     async show (req,res,next){
         try {
-            const produtos = await Produto
+            const produto = await Produto
             .findById(req.params.id)
             .populate([
                 //"avaliacoes",
                 //"variacoes",
                 "loja"])
-            return res.send({ produtos })
+            return res.send({ produto })
         } catch (e) {
             next(e)
         }
+        console.log(produto)
     }
 
     //AVALIACOES

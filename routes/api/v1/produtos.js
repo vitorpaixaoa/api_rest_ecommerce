@@ -21,11 +21,10 @@ const produtoController = new ProdutoController;
 /*
 ---------- CLIENTE/VISITANTES ----------
 */
-    router.get("/", Validation(ProdutoValidation.index) ,produtoController.index);
-    router.get("/disponiveis",Validation(ProdutoValidation.indexDisponiveis) , produtoController.indexDisponiveis);
-    router.get("/search/:search", Validation(ProdutoValidation.search) , produtoController.search);
-    router.get("/:id", Validation(ProdutoValidation.show) , produtoController.show);
-
+router.get("/", Validation(ProdutoValidation.index), produtoController.index);
+router.get("/disponiveis", Validation(ProdutoValidation.indexDisponiveis), produtoController.indexDisponiveis);
+router.get("/search/:search", Validation(ProdutoValidation.search), produtoController.search);
+router.get("/:id", Validation(ProdutoValidation.show), produtoController.show);
 /*
 ---- VARIACOES -------
 */
