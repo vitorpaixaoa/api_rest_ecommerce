@@ -53,7 +53,7 @@ class VariacaoController {
 
     //PUT  /id: update
     async update (req,res,next){
-        const { codigo, fotos , nome, preco, promocao, entrega, quantidade } = req.body;
+        const { codigo, fotos , nome, preco, promocao, entrega, fotos ,quantidade } = req.body;
         const { loja, produto } = req.query;
         const { id: _id } = req.params;
         try {
@@ -64,6 +64,7 @@ class VariacaoController {
             if( fotos ) variacao.fotos = fotos;
             if( nome ) variacao.nome = nome;
             if( preco ) variacao.preco = preco;
+            if(fotos) variacao.fotos = fotos;
             if( promocao ) variacao.promocao = promocao;
             if( entrega ) variacao.entrega = entrega;
             if( quantidade ) variacao.quantidade = quantidade;
