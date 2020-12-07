@@ -13,7 +13,7 @@ class LojaController {
      //GET /:id
      show(req, res, next ){
         Loja.findById(req.params.id).select("_id nome cnpj email telefones endereco")
-        .then(lojas => res.send({ lojas }))
+        .then(loja => res.send({ loja }))
         .catch(next);
     }
 
