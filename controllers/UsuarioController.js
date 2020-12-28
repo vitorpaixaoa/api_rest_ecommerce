@@ -101,15 +101,13 @@ class UsuarioController {
     }
     
     //GET /senha-recuperada
-    showCompleteRecovery(req, res, next ){
-        if(!req.query.token) return res.render("recovery",{ error: "Token não identificado", success: null } );
-        Usuario.findOne({ "recovery.token": req.query.token }).then(usuario =>{
-            if(!usuario) return res.render("recovery", { error: "Não existe usuario com este token", success: null });
-            if( new Date(usuario.recovery.date) < new Date() ) return res.render("recovery", { error: "Token expirado, tente novamente", success: null });
+    showCompleteRecovery(req, res, next){
+        if(!req.query.token) return res.render("recovery", { error: "Token não identificado", success: null });
+        Usuario.findOne({ "recovery.token": req.query.token }).then(usuario => {
+            if(!usuario) return res.render("recovery", { error: "Não existe usuário com este token", success: null });
+            if( new Date(usuario.recovery.date) < new Date() ) return res.render("recovery", { error: "Token expirado. Tente novamente.", success: null });
             return res.render("recovery/store", { error: null, success: null, token: req.query.token });
         }).catch(next);
-
-        
     }
 
     //POST /senha-recuperada

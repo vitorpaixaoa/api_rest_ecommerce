@@ -1,6 +1,7 @@
 const transporter = require("nodemailer").createTransport(require("../config/email"));
 const { loja } = require("../config/index");
 const moment = require("moment");
+const { date } = require("joi");
 
 const _send = ({ subject, emails, message }, cb = null ) =>{
     const mailOptions = {
@@ -67,9 +68,9 @@ const atualizarPedido = ({ usuario, pedido, status, data, tipo }) =>{
     const message = `
         <h1 style="text-align:center;"> Pedido Atualizado </h1>
         <br />
-        <p> O pedido realizado hoje, no dia ${moment(pedido.createdAt).format("DD/MM/YYYY")}, teve uma atualização. </p>
+        <p> O pedido realizado no dia ${moment(pedido.createdAt).format("DD/MM/YYYY")}, teve uma atualização. </p>
         <br />
-        <p>Nova atualização: ${status} - realizado em ${moment(pedido.createdAt).format("DD/MM/YYYY HH:mm")} <p/>
+        <p>Nova atualização: ${status} - realizado em ${moment().format("DD/MM/YYYY")} <p/>
         <a href="${loja}">Acesse a loja para saber mais.</a>
         <br/><br/>
         <p> Atenciosamente,</p>
