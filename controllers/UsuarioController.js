@@ -43,15 +43,15 @@ class UsuarioController {
     }
 
     //UPDATE /
-    update ( req, res, next ){
+    update(req, res, next){
         const { nome, email, password } = req.body;
         Usuario.findById(req.payload.id).then((usuario) => {
-            if(!usuario) return res.status(401).json({ errors: "Usuario não registrado "});
+            if(!usuario) return res.status(401).json({ errors: "Usuario não registrado" });
             if(typeof nome !== "undefined") usuario.nome = nome;
             if(typeof email !== "undefined") usuario.email = email;
             if(typeof password !== "undefined") usuario.setSenha(password);
 
-            return usuario.save().then(() =>{
+            return usuario.save().then(() => {
                 return res.json({ usuario: usuario.enviarAuthJSON() });
             }).catch(next);
         }).catch(next);

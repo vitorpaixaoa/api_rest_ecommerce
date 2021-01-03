@@ -13,7 +13,7 @@ const ProdutoSchema = Schema({
     categoria: { type: Schema.Types.ObjectId, ref: "Categoria"},
     loja: { type: Schema.Types.ObjectId, ref: "Loja"},
     avaliacoes: { type: [{ type: Schema.Types.ObjectId, ref: "Avaliacoes"}] },
-    variacoes: { type: [{ type: Schema.Types.ObjectId, ref: "Variacoes"}] }
+    variacoes: { type: [{ type: Schema.Types.ObjectId, ref: "Variacao"}] }
 }, {timestamps: true });
 
 ProdutoSchema.plugin(mongoosePaginate);

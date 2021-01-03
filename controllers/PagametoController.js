@@ -54,32 +54,33 @@ class PagamentoController {
         }
     }
 
-    async pagar(req, res,next ) {
+    async pagar(req,res,next){
         const { senderHash } = req.body;
 
         try {
-                const pagamento = await Pagamento.findOne({_id: req.params.id, loja: req.query.loja });
-                if(!pagamento) return res.status(400).send({ error: "Pagamento não existe"});
-                const pedido = await Pedido.findById(pagamento.pedido).populate([
-                    { path: "cliente", populate: "usuario"},
-                    { path: "entrega"},
-                    { path: "pagamento"}
-                ]);
-                pedido.carrinho = await Promise.all(pedido.carrinho.map(async (item) => {
-                    item.produto = await Produto.findById(item.produto);
-                    item.variacao = await Variacao.findById(item.variacao);
-                    return item;
-                }));
-                const payload = await criarPagamento(senderHash, pedido);
-                pagamento.payload = (pagamento.payload) ? pagamento.payload.concat([payload]) : [payload];
-                if(payload.code) pagamento.pagSeguroCode = payload.code;
-                await pagamento.save();
-                
-                return res.send({ pagamento, payload })
-            
-        } catch (e) {
-            console.log(e)
-            next(e)
+
+            const pagamento = await Pagamento.findOne({ _id: req.params.id, loja: req.query.loja });
+            if(!pagamento) return res.status(400).send({ error: "Pagamento nao existe" });
+            const pedido = await Pedido.findById(pagamento.pedido).populate([
+                { path: "cliente", populate: "usuario" },
+                { path: "entrega" },
+                { path: "pagamento" }
+            ]);
+            pedido.carrinho = await Promise.all(pedido.carrinho.map(async (item) => {
+                item.produto = await Produto.findById(item.produto);
+                item.variacao = await Variacao.findById(item.variacao);
+                return item;
+            }));
+
+            const payload = await criarPagamento(senderHash, pedido);
+            pagamento.payload = (pagamento.payload) ? pagamento.payload.concat([payload]) : [ payload ];
+            if(payload.code) pagamento.pagSeguroCode = payload.code;
+            await pagamento.save();
+
+            // return res.send({ pagamento: { ...pagamento._doc, payload: null } });
+            return res.send({ pagamento });
+        }catch(e){
+            next(e);
         }
     }
 
